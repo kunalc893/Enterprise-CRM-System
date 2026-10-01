@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - nexus_data:/data/db
+  api:
+    build: ./backend
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/nexus-crm
+      PORT: 4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongodb
+  web:
+    build: ./frontend
+    ports:
+      - "5174:5173"
+    depends_on:
+      - api
+volumes:
+  nexus_data:
